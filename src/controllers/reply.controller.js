@@ -52,11 +52,11 @@ async function handleRegister(req, res) {
 
 async function handleLogout(req, res) {
   // delete session from DB
-  const session_id = req.cookies?.session_id
+  const session_id = req.cookies?.session_id;
 
-  await Session.findByIdAndDelete(session_id)
+  await Session.findByIdAndDelete(session_id);
 
-  return res.send("Logged out successfully!")
+  return res.send("Logged out successfully!");
 }
 
 module.exports = { handleLogin, handleRegister };
