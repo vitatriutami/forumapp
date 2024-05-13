@@ -3,7 +3,7 @@ const Thread = require("../models/thread.model.js");
 
 // create
 async function handleCreateThreads(req, res) {
-  const { title, content } = req.body;
+  const { title, content, userId } = req.body;
 
   const newThread = new Thread({
     title,
