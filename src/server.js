@@ -17,11 +17,11 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api", middleware);
+// app.use("/api", middleware);
 
 // Router
 app.use(authRouter);
-app.use(threadRouter);
-app.use(replyRouter);
+app.use("/api", threadRouter);
+app.use("/api", replyRouter);
 
 app.listen(PORT);
