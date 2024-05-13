@@ -1,7 +1,7 @@
 require("dotenv").config();
 const Thread = require("../models/thread.model.js");
 
-// cread
+// create
 async function handleCreateThreads(req, res) {
   const { title, content } = req.body;
 
@@ -10,7 +10,7 @@ async function handleCreateThreads(req, res) {
     content,
     userId,
   });
-  const savedThread = await newThread.save();
+  const saveThread = await newThread.save();
   return res.status(201).json({ message: "A thread is just created!", data: saveThread });
 }
 
