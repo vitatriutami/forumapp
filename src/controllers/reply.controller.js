@@ -28,13 +28,13 @@ async function handleUpdateReplies(req, res) {
 
   const replyId = req.params.id;
 
-  const updateThread = await Thread.findOneAndUpdate(
-    { _id: threadId },
-    { title, content, userId },
+  const updateReply = await Reply.findOneAndUpdate(
+    { _id: replyId },
+    { comment, threadId, userId },
     { new: true }
   );
 
-  res.status(201).json({ message: "A thread is just updated!", data: updateThread });
+  res.status(201).json({ message: "A thread is just updated!", data: updateReply });
 }
 
 
