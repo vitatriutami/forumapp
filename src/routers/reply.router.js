@@ -4,7 +4,8 @@ const replyController = require("../controllers/reply.controller.js");
 
 replyRouter.post("/replies", replyController.handleCreateReplies);
 replyRouter.get("/replies", replyController.handleGetReplies);
-replyRouter.delete("/replies/:id", replyController.handleDeleteReplies)
+replyRouter.patch("/replies/:id", replyController.handleUpdateReplies);
+replyRouter.delete("/replies/:id", replyController.handleDeleteReplies);
 
 
 module.exports = replyRouter;

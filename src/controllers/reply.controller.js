@@ -47,4 +47,4 @@ async function handleDeleteReplies(req, res) {
   res.status(201).send("Reply is just deleted");
 }
 
-module.exports = { handleCreateReplies, handleGetReplies, handleDeleteReplies };
+module.exports = { handleCreateReplies, handleGetReplies, handleUpdateReplies, handleDeleteReplies };
