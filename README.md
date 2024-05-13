@@ -173,7 +173,7 @@ An app where you can keep connect with your club member forum.
 - Request Body
   | Parameter | Type | Description |
   | :-------- | :------- | :------------------------- |
-  | `reply` | `String` | Required |
+  | `comment` | `String` | Required |
   | `userId` | `String` |Required |
   | `threadId` | `String` | Required |
 
@@ -184,7 +184,7 @@ An app where you can keep connect with your club member forum.
       "status": 201,
       "message": "A reply is just posted!",
       "data": {
-          "reply": "String",
+          "comment": "String",
           "threadId": "String",
           "userId": "String",
   }
@@ -194,7 +194,7 @@ An app where you can keep connect with your club member forum.
   ```http
   {
       "status": 401,
-      "message": "Error creating a thread"
+      "message": "Error creating a reply"
   }
   ```
 
