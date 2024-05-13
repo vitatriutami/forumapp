@@ -3,60 +3,77 @@ const User = require("../models/user.model.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-async function handleLogin(req, res) {
-  const { email, password } = req.body;
+const Thread = require("../models/thread.model.js")
+const Session = require("../models/session.model.js")
 
-  // 1. Cari user berdasarkan email
-  // 2. Cocokkan password user
-  // 3. Buat payload/body untuk token
-  // 4. Generate token
-  // 5. Set token ke cookie user
+// cread
+async function handleCreateThreads(req, res) {
+  const { title, content } = req.body;
+  
+  const sessionId = req.cookies.session_id;
+  if(!sessionId) {
+    return res.status(401).json("You don't have access!")
+  }
+  
+  const session = await Session.findById(sessionId)
+  if(!session) {
+    return res.status(401).json("You don't have access!")
+  }
 
-
-  // 1. Cari user berdasarkan email
-  const user = await User.findOne({ email });
-  if (!user) res.status(404).json({ message: "Account is not found" });
-
-  // 2. Cocokkan password user
-  const isPasswordMatch = await bcrypt.compare(password, user.password);
-  if (!isPasswordMatch) res.status(403).json({ message: "Invalid password" });
-
-
-  // 3. Buat payload/body untuk token
-  const payload = {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-  };
-
-  // 4. Generate token
-  const token = jwt.sign(payload, process.env.JWT_SECRET);
-
-  // 5. Set token ke cookie user
-  res.cookie("token", token).send("Login success!");
-}
-
-async function handleRegister(req, res) {
-  const { name, email, password } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 12);
-
-  const newUser = new User({
-    name,
-    email,
-    password: hashedPassword,
+  const newThread = new Thread({
+    title,
+    content,
+    sender: session.userId,
   });
-  const user = await newUser.save();
+  const savedThread = await newThread.save();
+  return res.status(201).json({ message: "A thread is just created!", thread: aNewThread});
 
-  res.status(201).json({ message: "User register success", data: user });
+
+
+
 }
 
-async function handleLogout(req, res) {
-  // delete session from DB
-  const session_id = req.cookies?.session_id;
-
-  await Session.findByIdAndDelete(session_id);
-
-  return res.send("Logged out successfully!");
+// read
+async function handleGetAllThreads(req, res) {
+  const threads = await Thread.find().populate("sender", "email")
+  res.status(201).json(threads)
 }
 
-module.exports = { handleLogin, handleRegister };
+async function handleGetAThread(req, res) {
+  const { id } = req.params
+
+  try {
+    const thread = await Thread.findById(id).populate("sender", "email")
+    if(!thread) {
+      return res.status(401).json("No thread is found")
+    }
+    res.status(201).json(thread)
+  } catch (error) {
+    res.status(501).json("No thread is found")
+  }
+}
+
+// delete
+async function handleDeleteThreads(req, res) {
+  const { id } = req.params;
+
+  const sessionId = req.cookies.session_id
+  if (!sessionId) {
+    return res.status(401).json("You don't have access!")
+  }
+
+  const session = await Session.findById(sessionId)
+  if(!session) {
+    return res.status(401).json("You don't have access!")
+  }
+
+  const thread = await Thread.findById(id)
+  if(!thread) {
+    return res.status(401).json("No thread is found")
+  }
+
+  await Thread.findByIdAndDelete(id);
+  res.status(201).json("Thread is just deleted")
+}
+
+module.exports = { handleCreateThreads, handleGetAllThreads, handleGetAThread, handleDeleteThreads };

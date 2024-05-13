@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const middleware = require("./constrollers/middleware.js");
+const middleware = require("./controllers/middleware.js");
 const app = express();
 const PORT = 8000;
 

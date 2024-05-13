@@ -40,7 +40,7 @@ An app where you can keep connect with your club member forum.
 
   ```http
   {
-      "status": 200,
+      "status": 201,
       "message": "A new user is registered",
       "data": []
   }
@@ -49,7 +49,7 @@ An app where you can keep connect with your club member forum.
 - Error Response
   ```http
   {
-      "status": 400,
+      "status": 401,
       "message": "Error registering a user"
   }
   ```
@@ -184,7 +184,6 @@ An app where you can keep connect with your club member forum.
       "status": 201,
       "message": "A reply is just posted!",
       "data": {
-          "id": "String",
           "reply": "String",
           "threadId": "String",
           "userId": "String",
@@ -220,7 +219,6 @@ An app where you can keep connect with your club member forum.
       "status": 201,
       "message": "Just bookmarked a thread!",
       "data": {
-          "id": "String",
           "userId": "String",
           "threadId": "String"
   }

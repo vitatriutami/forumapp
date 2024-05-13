@@ -47,7 +47,7 @@ async function handleRegister(req, res) {
   });
   const user = await newUser.save();
 
-  res.status(201).json({ message: "User register success", data: user });
+  res.status(201).json({ message: "User is registered successfully", data: user });
 }
 
 async function handleLogout(req, res) {
@@ -59,4 +59,4 @@ async function handleLogout(req, res) {
   return res.send("Logged out successfully!")
 }
 
-module.exports = { handleLogin, handleRegister };
+module.exports = { handleLogin, handleRegister, handleLogout };
