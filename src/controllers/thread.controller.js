@@ -1,79 +1,76 @@
 require("dotenv").config();
-const User = require("../models/user.model.js");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-
-const Thread = require("../models/thread.model.js")
-const Session = require("../models/session.model.js")
+const Thread = require("../models/thread.model.js");
 
 // cread
 async function handleCreateThreads(req, res) {
   const { title, content } = req.body;
-  
-  const sessionId = req.cookies.session_id;
-  if(!sessionId) {
-    return res.status(401).json("You don't have access!")
-  }
-  
-  const session = await Session.findById(sessionId)
-  if(!session) {
-    return res.status(401).json("You don't have access!")
-  }
 
   const newThread = new Thread({
     title,
     content,
-    sender: session.userId,
+    userId,
   });
   const savedThread = await newThread.save();
-  return res.status(201).json({ message: "A thread is just created!", thread: aNewThread});
-
-
-
-
+  return res.status(201).json({ message: "A thread is just created!", data: saveThread });
 }
 
 // read
 async function handleGetAllThreads(req, res) {
-  const threads = await Thread.find().populate("sender", "email")
-  res.status(201).json(threads)
+  const threads = await Thread.find().populate("userId");
+  res.status(201).json({ message: "This is all threads", data: allThreads });
 }
 
 async function handleGetAThread(req, res) {
-  const { id } = req.params
+  const threadId = req.params.id;
 
   try {
-    const thread = await Thread.findById(id).populate("sender", "email")
-    if(!thread) {
-      return res.status(401).json("No thread is found")
+    const thread = await Thread.findById(threadId).populate("userId");
+    if (!thread) {
+      return res.status(401).json("No thread is found");
     }
-    res.status(201).json(thread)
+    res.status(201).json(thread);
   } catch (error) {
-    res.status(501).json("No thread is found")
+    res.status(501).json("No thread is found");
   }
 }
+
+// update
+async function handleUpdateThreads(req, res) {
+  const { title, content, userId } = req.body;
+
+  const threadId = req.params.id;
+
+  const updateThread = await Thread.findOneAndUpdate(
+    { _id: threadId },
+    { title, content, userId },
+    { new: true }
+  );
+
+  res.status(201).json({ message: "A thread is just updated!", data: updateThread });
+}
+
 
 // delete
 async function handleDeleteThreads(req, res) {
-  const { id } = req.params;
+  const threadId = req.params.id;
 
-  const sessionId = req.cookies.session_id
-  if (!sessionId) {
-    return res.status(401).json("You don't have access!")
-  }
+  // const sessionId = req.cookies.session_id;
+  // if (!sessionId) {
+  //   return res.status(401).json("You don't have access!");
+  // }
 
-  const session = await Session.findById(sessionId)
-  if(!session) {
-    return res.status(401).json("You don't have access!")
-  }
+  // const session = await Session.findById(sessionId);
+  // if (!session) {
+  //   return res.status(401).json("You don't have access!");
+  // }
 
-  const thread = await Thread.findById(id)
-  if(!thread) {
-    return res.status(401).json("No thread is found")
-  }
+  // const thread = await Thread.findById(id);
+  // if (!thread) {
+  //   return res.status(401).json("No thread is found");
+  // }
 
   await Thread.findByIdAndDelete(id);
-  res.status(201).json("Thread is just deleted")
+  res.status(201).json("A thread is just deleted");
 }
 
-module.exports = { handleCreateThreads, handleGetAllThreads, handleGetAThread, handleDeleteThreads };
+module.exports = { handleCreateThreads, handleGetAllThreads, handleGetAThread, handleUpdateThreads, handleDeleteThreads };

@@ -7,6 +7,7 @@ const threadController = require("../controllers/thread.controller.js");
 threadRouter.post("/threads", threadController.handleCreateThreads)
 threadRouter.get("/threads", threadController.handleGetAllThreads)
 threadRouter.get("/threads/:id", threadController.handleGetAThread)
+threadRouter.get("/threads/:id", threadController.handleUpdateThreads)
 threadRouter.delete("/threads/:id", threadController.handleDeleteThreads)
 
 
